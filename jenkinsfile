@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Preparation') {
+            steps {
+                echo 'prepare github repo....'
+                git branch: 'master', url: 'https://github.com/swelams/nodejs-repo'
+            }
+        }
+        stage('Build-client') {
+            steps {
+                echo 'building client image....'
+                sh "docker build badreads-frontend/. -t mohamedswelam/client:${env.BUILD_NUMBER}"
+            }
+        }
+
+        stage('Build-server') {
+            steps {
+                echo 'building server image...'
+                sh "docker build badreads-backend/. -t mohamedswelam/server:${env.BUILD_ID}"
+            }
+        }
+
+
+        stage('artifact-client') {
+            steps {
+                echo ' pushing client image into docker repo...'
+                withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                    sh "docker push mohamedswelam/client:${env.BUILD_NUMBER}"
+                    
+                }
+            }
+        }
+
+        stage('artifact-server') {
+            steps {
+                echo 'pushing server image to docker repo...'
+                withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
+                    sh "docker push mohamedswelam/server:${env.BUILD_ID}"
+                    
+                }
+            }
+        }
+        stage('updating deployment files'){
+            steps {
+                echo 'replacing old images with the new one'
+                sh "sed -i "s|image:.*|image: mohamedswelam/client:${env.BUILD_NUMBER}|g" k8s/frontend-deployment.yaml"
+                sh "sed -i "s|image:.*|image: mohamedswelam/server:${env.BUILD_ID}|g" k8s/backend-deployment.yaml"
+
+            }
+        }
+
+        stage('Deploy to minikube') {
+            steps {
+                echo 'Deploying to minikube'
+                withCredentials([file(credentialsId:'kube-config', variable:'KUBECONFIG')]){}
+                script{
+                    sh 'kubectl apply -f k8s'
+                }
+            }
+        }
+
+    }
+}

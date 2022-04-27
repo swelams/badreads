@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  selector:
+    matchLabels:
+      component: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: backend
+    spec:
+      volumes:
+      - name: images
+        persistentVolumeClaim:
+          claimName: images-presistent-volume-claim
+      containers:
+      - name: backend
+        image: kareemelkasaby/badreads-backend:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4000
+        volumeMounts:
+        - name: images
+          mountPath: /app/public/authors
+        - name: images
+          mountPath: /app/public/books
+        - name: images
+          mountPath: /app/public/users
+        env:
+        - name: MONGOHOST
+          value: mongo-clusterip  

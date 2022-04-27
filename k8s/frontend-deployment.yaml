@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  selector:
+    matchLabels:
+      component: frontend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: mohamedswelam/client:11
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REACT_APP_PRODUCTION_IP
+          value: backend-clusterip

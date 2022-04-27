@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+spec:
+  selector:
+    matchLabels:
+      component: mongo
+  template:
+    metadata:
+      labels:
+        component: mongo
+    spec:
+      volumes:
+      - name: mongo-database
+        persistentVolumeClaim:
+          claimName: mongo-presistent-volume-claim
+      containers:
+      - name: mongo
+        image: mongo:4.2.8
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-database
+          mountPath: /data/db
+        env:
+        - name: MONGO_INITDB_DATABASE
+          value: admin
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: admin
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+              secretKeyRef:
+                name: mongo-root-password
+                key: MONGO_INITDB_ROOT_PASSWORD

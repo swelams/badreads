@@ -1,0 +1,33 @@
+{
+  "name": "badreads-backend",
+  "version": "1.0.0",
+  "description": "backend for badreads website iti nodejs course project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No Errors\"",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eslamkarim/bad-reads.git"
+  },
+  "keywords": [
+    "nodejs"
+  ],
+  "author": "eslam,mina,karim,atef,esraa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eslamkarim/bad-reads/issues"
+  },
+  "homepage": "https://github.com/eslamkarim/bad-reads#readme",
+  "dependencies": {
+    "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.10",
+    "multer": "^1.4.2"
+  }
+}

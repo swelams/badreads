@@ -1,0 +1,3 @@
+./badreads-backend/node_modules
+./badreads-frontend/node_modules
+nodekey.pem
