@@ -47,8 +47,8 @@ pipeline {
         stage('updating deployment files'){
             steps {
                 echo 'replacing old images with the new one'
-                sh "sed -i "s|image:.*|image: mohamedswelam/client:${env.BUILD_NUMBER}|g" k8s/frontend-deployment.yaml"
-                sh "sed -i "s|image:.*|image: mohamedswelam/server:${env.BUILD_ID}|g" k8s/backend-deployment.yaml"
+                sh "sed -i \"s|image:.*|image: mohamedswelam/client:${env.BUILD_NUMBER}|g\" k8s/frontend-deployment.yaml"
+                sh "sed -i \"s|image:.*|image: mohamedswelam/server:${env.BUILD_ID}|g\" k8s/backend-deployment.yaml"
 
             }
         }
