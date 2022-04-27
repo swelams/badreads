@@ -56,10 +56,11 @@ pipeline {
         stage('Deploy to minikube') {
             steps {
                 echo 'Deploying to minikube'
-                withCredentials([file(credentialsId:'kube-config', variable:'KUBECONFIG')]){}
+                withCredentials([file(credentialsId:'kube-config', variable:'KUBECONFIG')]){
                 script{
-                    sh 'kubectl apply -f k8s'
+                    sh 'kubectl apply -f k8s'}
                 }
+
             }
         }
 
