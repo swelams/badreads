@@ -26,7 +26,7 @@ pipeline {
         stage('artifact-client') {
             steps {
                 echo ' pushing client image into docker repo...'
-                withCredentials([usernamePassword(credentialsId: 'dockerusername-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                     sh "docker push mohamedswelam/client:${env.BUILD_NUMBER}"
                     
@@ -37,7 +37,7 @@ pipeline {
         stage('artifact-server') {
             steps {
                 echo 'pushing server image to docker repo...'
-                withCredentials([usernamePassword(credentialsId: 'dockerusername-password', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                     sh "docker push mohamedswelam/server:${env.BUILD_ID}"
                     
@@ -53,17 +53,14 @@ pipeline {
             }
         }
 
-        /*stage('Deploy to minikube') {
+        stage('Deploy to minikube') {
             steps {
-                echo 'Deploying to minikube'
+                echo 'Deploying to k8s cluster'
                 withCredentials([file(credentialsId:'kube-config', variable:'KUBECONFIG')]){
-                script{
-                    sh 'kubectl --kubeconfig=KUBECONFIG apply -f k8s'}
-                }
+                echo 'kubectl apply -f k8s'
 
             }
-        }*/
+        }
 
     }
 }
-hello from master
