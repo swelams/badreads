@@ -60,5 +60,5 @@ pipeline {
                 echo 'kubectl apply -f k8s'
                 }
             }
-    }
+        }
 }
