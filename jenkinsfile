@@ -58,9 +58,7 @@ pipeline {
                 echo 'Deploying to k8s cluster'
                 withCredentials([file(credentialsId:'kube-config', variable:'KUBECONFIG')]){
                 echo 'kubectl apply -f k8s'
-
+                }
             }
-        }
-
     }
 }
