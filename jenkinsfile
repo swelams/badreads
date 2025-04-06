@@ -26,7 +26,7 @@ pipeline {
         stage('artifact-client') {
             steps {
                 echo ' pushing client image into docker repo...'
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                     sh "docker push mohamedswelam/client:${env.BUILD_NUMBER}"
                     
@@ -37,7 +37,7 @@ pipeline {
         stage('artifact-server') {
             steps {
                 echo 'pushing server image to docker repo...'
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh "echo $PASSWORD | docker login -u $USERNAME --password-stdin"
                     sh "docker push mohamedswelam/server:${env.BUILD_ID}"
                     
